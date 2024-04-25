@@ -1,0 +1,109 @@
+<%- include ('../partials/head') %>
+<%- include ('../partials/menu') %>
+<div class="col"><%- include ('../partials/message') %></div>
+
+<main>
+  <div class="container">
+    <!-- THE REST OF YOUR HTML CODE GOES HERE -->
+
+    <div class="row">
+      <div class="col-sm-1">
+          <img src="/images/profile_image.png" alt="Profile_image" style="padding: 10px; width: 100px;">
+      </div>
+      <div class="col">     
+        <h3 style="padding: 10px; padding-top: 35px;">Welcome <%- user.username %></h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-7">
+        <div class="row">
+          <div class="col-md-5">
+            <div class="card w-80">
+              <div class="card-body">
+                <img src="/images/home_icon.png" alt="home_icon" style="display:inline; width: 35px; padding-right: 10px;">
+                <h5 class="card-title" style="display:inline">
+                  Home</h5>
+                  <a href="/user/updateInfo">
+                    <button type="submit" class="btn btn-outline-dark btn-sm" style="float: right;">Update</button>
+                  </a>
+                <p class="card-text"><%- user.home_address %></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5">  
+            <div class="card w-80">
+              <div class="card-body">
+                <img src="/images/smartphone_icon.png" alt="smartphone_icon" style="display:inline; width: 35px; padding-right: 10px;"> 
+                <h5 class="card-title" style="display:inline">Phone</h5>
+                <a href="/user/updateInfo">
+                  <button type="submit" class="btn btn-outline-dark btn-sm" style="float: right;">Update</button>
+                </a>
+                <p class="card-text"><%- user.phone %></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-9" style="padding-top: 20px;"> 
+        <div class="card w-80">
+          <div class="card-body">
+            <img src="/images/friends_icon.png" alt="friends_icon" style="display:inline; width: 35px; padding-right: 10px;">   
+            <h5 class="card-title" style="display:inline;">Friends</h5>
+            <form action="/user/addFriend" method="POST">
+              <input type="text" id="username" name="username" placeholder="Username">
+              <button type="submit" class="btn btn-outline-dark btn-sm" style="float: right;">Add</button>
+            </form>
+          </div>
+          <ul class="list-group list-group-flush">
+            <% 
+              if (friends) {
+                friends.forEach(function(friend) {
+            %>
+            <li class="list-group-item"><%- friend.username %>
+            <form action="/user/removeFriend" method="POST">
+              <input type="hidden" id="user_id" name="user_id" value="<%- friend.user_id %>">
+              <button type="submit" class="btn btn-outline-dark btn-sm" style="float: right;">Remove</button>
+            </form>
+            </li>
+             <% }) } %>
+          </ul>
+        </div>
+        </div>
+      </div>
+      
+      <div class="col-md-5"> 
+        <div class="card w-80">
+          <div class="card-body">
+            <img src="/images/history_icon.png" alt="history_icon" style="display:inline; width: 35px; padding-right: 10px;">  
+            <h5 class="card-title" style="display:inline">History</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            <% if(history && history != []) {
+              history.forEach(function(item) {%>
+                  <li class="list-group-item">
+                      <div class="row">
+                          <div class="col-md-6">
+                              <p> <b>Date:</b> <%- item.time %></p>
+                              <p> <b>From:</b> <%- item.departing %></p>
+                              <p> <b>To:</b> <%- item.destination %></p>
+                              <p> <b>Purpose:</b> <%- item.purpose %></p>
+                          </div>
+                          <div class="col">    
+                              <b>Seats:</b> 
+                              <p><%- item.seats %></p>
+                          </div>
+                      </div>
+                      </li>
+               <%})
+          } else {
+            console.log("No trips in database! Please add a trip." + data);
+            %>
+            <p>No trips in history! Go take some trips!</p>
+            <% } %>
+          </ul>
+        </div>  
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include ('../partials/footer') %>

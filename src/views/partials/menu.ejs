@@ -1,0 +1,53 @@
+<header style="background-color: #3f5067;">
+    <nav class="navbar navbar-expand-sm border-bottom">
+      <button onclick="location.href='/home'" class="btn ">
+        <img src="/images/logo_cropped.jpg" alt="TurboTransitLogo" width="75px"/>
+      </button>
+      <div class="container">
+        <button
+          class="navbar-toggler ms-auto"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar-collapse"
+          aria-controls="navbar"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <!-- TO-DO: For Discover, add a <a> tag with an attribute href to call the '/discover' API -->
+                <a class="nav-link" href="/user/profile">
+                  <p class="display-6" style="color: white; font-size:x-large; margin-top: 10px;">Profile</p></a>
+            </li>
+            <p class="display-6" style="color: white; font-size:x-large; margin-top: 15px;">|</p>
+            <li>
+              <a class="nav-link" href="/message/messages">
+                <p class="display-6" style="color: white; font-size:x-large; margin-top: 10px;">Messages</p>
+              </a>
+            </li>
+            <p class="display-6" style="color: white; font-size:x-large; margin-top: 15px;">|</p>
+            <li class="nav-item">
+              <!-- TO-DO: For Discover, add a <a> tag with an attribute href to call the '/discover' API -->
+                <a class="nav-link" href="/trip/transit">
+                  <p class="display-6" style="color: white; font-size:x-large; margin-top: 10px;">Discover Trips</p>
+                </a>
+            </li>
+            <p class="display-6" style="color: white; font-size:x-large; margin-top: 15px;">|</p>
+            <li class="nav-item">
+              <!-- TO-DO: For Discover, add a <a> tag with an attribute href to call the '/discover' API -->
+                <a class="nav-link" href="/trip/my_trips">
+                  <p class="display-6" style="color: white; font-size:x-large; margin-top: 10px;">My Trips</p>
+                </a>
+            </li>
+          </ul>
+          <div class="nav-item me-1">
+                <a class="nav-link" href="/auth/logout">
+                  <p class="display-6" style="color: white; font-size:x-large; margin-top: 10px;">Logout</p>
+                </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+   </header>

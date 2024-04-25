@@ -1,0 +1,165 @@
+<%- include ('../partials/head') %>
+<%- include ('../partials/menu') %>
+<div class="col"><%- include ('../partials/message') %></div>
+
+<main>
+  <div class="container">
+    <!-- THE REST OF YOUR HTML CODE GOES HERE -->
+    <form action="/trip/createTrip" method="POST" style="padding-top: 20px;">
+        <div class="card">
+            <div class="card-body">
+                <h4>Create New Trip</h4>                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="disabledSelect">Your Departing Location</label>
+                            <input name="departing" type="text" id="departing" class="form-control" placeholder="Type Your Location">
+                            <input name="departing_lat" type="hidden" id="departing_lat" value="" />
+                            <input name="departing_long" type="hidden" id="departing_long" value="" />
+                        </div>
+                    </div>
+                    <div class="col">     
+                        <div class="form-group">
+                            <label for="textInput">Your Destination</label>
+                            <input name="destination" type="text" id="destination" class="form-control" placeholder="Type Your Destination">
+                            <input name="destination_lat" type="hidden" id="destination_lat" value="" />
+                            <input name="destination_long" type="hidden" id="destination_long" value="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="disabledSelect">Purpose of Travel</label>
+                    <input name="purpose" type="text" id="disabledTextInput" class="form-control" placeholder="Type your purpose of travel here">
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="disabledSelect">Number of Available Seats</label>
+                                    <select name="seats" class="form-select" aria-label="Default select example">
+                                        <option selected>Select a number</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">     
+                            <div class="form-group">
+                                <label for="textInput">Time of Departure</label>
+                                <input name="time" type="datetime-local" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">     
+                            <div class="form-group">
+                                <div style="padding-top: 20px;">
+                                    <button type="submit" class="btn btn-outline-dark" style="float: right;">Create Trip</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </form>
+    <div style="padding-top: 20px;" >
+      <div class="card w-80">
+        <div class="card-body">
+            <h5 class="card-title" style="display:inline">My Trips</h5>
+        </div>
+            <ul class="list-group list-group-flush">
+                <!--  -->
+                <% if(data) {
+                    data.forEach(function(item) {%>
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p> <b>Date:</b> <%- item.time %></p>
+                                    <p> <b>From:</b> <%- item.departing %></p>
+                                    <p> <b>To:</b> <%- item.destination %></p>
+                                    <p> <b>Purpose:</b> <%- item.purpose %></p>
+                                </div>
+                                <div class="col">    
+                                    <b>Seats:</b> 
+                                    <p><%- item.seats %></p>
+                                    <p>TBC</p>
+                                </div>
+                                <div class="col">
+                                    <% if (item.user_id != active_user.user_id) {%>
+                                        <form action="/trip/leaveTrip" method="POST">
+                                            <input type="hidden" id="tripID" name="tripID" value="<%- item.trip_id %>">
+                                            <button type="submit" class="btn btn-outline-dark" style="float: right;">Leave</button>
+                                        </form>
+                                    <% } else { %>
+                                    <form action="/trip/editTrips" method="POST">
+                                        <input type="hidden" id="tripID" name="tripID" value="<%- item.trip_id %>">
+                                        <button type="submit" class="btn btn-outline-dark" style="float: right;">Edit</button>
+                                    </form>
+                                    <% } %>
+                                </div>
+                            </div>
+                            </li>
+                     <%})
+                }%>
+            </div> 
+        </div>
+    </div>
+
+<script>
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+        key: '<%= apikey %>',
+        libraries: 'places'
+    });
+</script>
+
+<script>
+    const initialize = async () => {
+        var departInput = document.getElementById('departing');
+        var departLat = document.getElementById('departing_lat');
+        var departLong = document.getElementById('departing_long');
+        var destInput = document.getElementById('destination');
+        var destLat = document.getElementById('destination_lat');
+        var destLong = document.getElementById('destination_long');
+
+        const { Autocomplete } = await google.maps.importLibrary('places');
+
+        var departAuto = new Autocomplete(departInput);
+        var destAuto = new Autocomplete(destInput);
+        
+        departAuto.addListener('place_changed', () => {
+            console.log("Place to changed!");
+            var place = departAuto.getPlace();
+            if (!place.geometry || !place.geometry.location) {
+                console.log("Returned place contains no geometry");
+                return;
+            }
+            let loc = place.geometry.location;
+            console.log(loc.toString());
+            departLat.value = loc.lat();
+            departLong.value = loc.lng();
+        });
+        destAuto.addListener('place_changed', () => {
+            console.log("Place from changed!");
+            var place = destAuto.getPlace();
+            if (!place.geometry || !place.geometry.location) {
+                console.log("Returned place contains no geometry");
+                return;
+            }
+            let loc = place.geometry.location;
+            console.log(loc.toString());
+            destLat.value = loc.lat();
+            destLong.value = loc.lng();
+        });
+    }
+
+    initialize();
+</script>
+
+
+</main>
+
+<%- include ('../partials/footer') %>
